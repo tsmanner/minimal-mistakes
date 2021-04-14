@@ -141,6 +141,31 @@ toc_icon: "cog"
 ---
 ```
 
+{% capture notice-text %}
+**Note:** You need to use contiguous levels of headings for the TOC to generate properly. For example:
+
+```markdown
+Good headings:
+
+# Heading
+## Heading
+### Heading
+### Heading
+# Heading
+## Heading
+
+Bad headings:
+
+# Heading
+### Heading (skipped H2)
+##### Heading (skipped H4)
+```
+{% endcapture %}
+
+<div class="notice--warning">
+  {{ notice-text | markdownify }}
+</div>
+
 ## Archive layout
 
 Essentially the same as `single` with markup adjustments and some modules removed.
@@ -782,3 +807,49 @@ Add the new `.btn--reddit` class to the `<a>` element from earlier, [compile `ma
 ```
 
 ![Reddit social share link button]({{ "/assets/images/mm-social-share-links-reddit-color.png" | relative_url }})
+
+---
+
+## Custom head and footer
+
+The `default` layout includes a number of custom templates, which provide ways for you to directly add content to all your pages.
+
+### Head
+
+`_includes/head/custom.html` is included at the end of the `<head>` tag. An example use of this include is to add custom CSS per page:
+
+Add some Liquid tags for the new configuration to `_includes/head/custom.html`.
+{% raw %}```html
+{% if page.page_css %}
+  {% for stylesheet in page.page_css %}
+    <link rel="stylesheet" href="{{ stylesheet | relative_url }}">
+  {% endfor %}
+{% endif %}
+```{% endraw %}
+
+Next, add `page_css` to any page's YAML Front Matter to have your CSS loaded for that page.
+```yaml
+page_css:
+  - /path/to/your/custom.css
+```
+
+### Footer
+
+`_includes/footer/custom.html` is included at the beginning of the `<footer>` tag. An example use of this include is to add custom JavaScript per page:
+
+Add some Liquid tags for the new configuration to `_includes/footer/custom.html`.
+{% raw %}```html
+{% if page.page_js %}
+  {% for script in page.page_js %}
+    <script src="{{ script | relative_url }}"></script>
+  {% endfor %}
+{% endif %}
+```{% endraw %}
+
+Next, add `page_js` to any page's YAML Front Matter to have your CSS loaded for that page.
+```yaml
+page_js:
+  - /path/to/your/custom.css
+```
+
+---
